@@ -29,6 +29,8 @@ const QrDisplay: React.FC<{ value: string; options: QrOptions; }> = ({ value, op
   };
 
   const downloadSVG = () => {
+    // Note: SVG download via this method won't include the embedded logo from the canvas.
+    // A more complex solution would be needed to merge SVG logo into SVG QR code.
     toSvg(value, {
       width: options.size,
       color: { dark: options.fgColor, light: options.bgColor },
@@ -61,6 +63,15 @@ const QrDisplay: React.FC<{ value: string; options: QrOptions; }> = ({ value, op
     }
   };
 
+  const imageSettings = options.logoImage
+    ? {
+        src: options.logoImage,
+        height: options.size * 0.2,
+        width: options.size * 0.2,
+        excavate: true,
+      }
+    : undefined;
+
   const ActionButton: React.FC<{ onClick: () => void; children: React.ReactNode; primary?: boolean }> = ({ onClick, children, primary }) => (
     <button
       onClick={onClick}
@@ -87,6 +98,7 @@ const QrDisplay: React.FC<{ value: string; options: QrOptions; }> = ({ value, op
           fgColor={options.fgColor}
           bgColor={options.bgColor}
           level={options.level}
+          imageSettings={imageSettings}
         />
       </div>
       <div className="w-full flex flex-col sm:flex-row gap-3">

@@ -1,6 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
+import './index.css'; // Import Tailwind CSS
 import { registerSW } from 'virtual:pwa-register';
 
 // Enregistre le service worker. Le paramètre `immediate: true`

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import InputPanel from './InputPanel';
 import QrDisplay from './QrDisplay';
 import OptionsPanel from './OptionsPanel';
-import { Box, Grid, Paper, Fade, useTheme, useMediaQuery } from '@mui/material';
 
 export type QrOptions = {
   level: 'L' | 'M' | 'Q' | 'H';
@@ -20,54 +19,43 @@ const QrGenerator: React.FC = () => {
     bgColor: '#ffffff',
   });
 
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [displaySize, setDisplaySize] = useState(256);
 
   // Effect to handle responsive QR code size
   useEffect(() => {
     const updateSize = () => {
-      // Base size on a fraction of the window width or a max value
-      const newSize = isMobile ? Math.min(window.innerWidth * 0.75, 400) : options.size;
-      setDisplaySize(newSize);
+      const screenWidth = window.innerWidth;
+      if (screenWidth < 640) { // sm breakpoint
+        setDisplaySize(screenWidth * 0.8);
+      } else {
+        setDisplaySize(options.size);
+      }
     };
 
     updateSize();
     window.addEventListener('resize', updateSize);
     return () => window.removeEventListener('resize', updateSize);
-  }, [isMobile, options.size]);
-
+  }, [options.size]);
 
   return (
-    <Box sx={{ my: { xs: 2, sm: 4 } }}>
-      <Grid container spacing={{ xs: 2, md: 4 }}>
-        {/* Input and Options Panel */}
-        <Grid item xs={12} md={6}>
-          <Paper elevation={2} sx={{ p: { xs: 2, sm: 3 }, borderRadius: 2 }}>
-            <InputPanel onChange={setValue} />
-          </Paper>
-          <Box mt={2}>
-            <OptionsPanel options={options} setOptions={setOptions} />
-          </Box>
-        </Grid>
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+        {/* Left Panel */}
+        <div className="space-y-6">
+          <InputPanel onChange={setValue} />
+          <OptionsPanel options={options} setOptions={setOptions} />
+        </div>
 
-        {/* QR Code Display */}
-        <Grid item xs={12} md={6} sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          position: { md: 'sticky' },
-          top: { md: '20px' },
-          alignSelf: 'flex-start'
-        }}>
-          <Fade in={!!value} timeout={500}>
-            <Box>
-              {value && <QrDisplay value={value} options={{...options, size: displaySize}} />}
-            </Box>
-          </Fade>
-        </Grid>
-      </Grid>
-    </Box>
+        {/* Right Panel (QR Code) */}
+        <div className="lg:sticky top-8 self-start flex justify-center items-center">
+          {value && (
+            <div className="transition-opacity duration-500 ease-in-out opacity-100">
+              <QrDisplay value={value} options={{...options, size: displaySize}} />
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 

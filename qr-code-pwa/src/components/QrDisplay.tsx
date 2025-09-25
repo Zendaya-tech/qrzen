@@ -1,37 +1,30 @@
 import React, { useRef } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import { toSvg } from 'qrcode';
-import { Paper, Box, Button, ButtonGroup, Stack, useTheme } from '@mui/material';
-import DownloadIcon from '@mui/icons-material/Download';
-import ShareIcon from '@mui/icons-material/Share';
 import { QrOptions } from './QrGenerator';
+import { Download, Share2 } from 'lucide-react';
 
-interface QrDisplayProps {
-  value: string;
-  options: QrOptions;
-}
-
-const QrDisplay: React.FC<QrDisplayProps> = ({ value, options }) => {
+const QrDisplay: React.FC<{ value: string; options: QrOptions; }> = ({ value, options }) => {
   const qrRef = useRef<HTMLDivElement>(null);
-  const theme = useTheme();
 
   const getCanvas = (): HTMLCanvasElement | null => {
-    if (qrRef.current) {
-      return qrRef.current.querySelector('canvas');
-    }
-    return null;
+    return qrRef.current ? qrRef.current.querySelector('canvas') : null;
+  };
+
+  const download = (url: string, filename: string) => {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    if(url.startsWith('blob:')) URL.revokeObjectURL(url);
   };
 
   const downloadPNG = () => {
     const canvas = getCanvas();
     if (canvas) {
-      const pngUrl = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
-      let downloadLink = document.createElement('a');
-      downloadLink.href = pngUrl;
-      downloadLink.download = 'qrcode.png';
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
+      download(canvas.toDataURL('image/png'), 'qrcode.png');
     }
   };
 
@@ -43,14 +36,7 @@ const QrDisplay: React.FC<QrDisplayProps> = ({ value, options }) => {
     }, (err, svgString) => {
       if (err) throw err;
       const svgBlob = new Blob([svgString], { type: 'image/svg+xml' });
-      const svgUrl = URL.createObjectURL(svgBlob);
-      let downloadLink = document.createElement('a');
-      downloadLink.href = svgUrl;
-      downloadLink.download = 'qrcode.svg';
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
-      URL.revokeObjectURL(svgUrl);
+      download(URL.createObjectURL(svgBlob), 'qrcode.svg');
     });
   };
 
@@ -75,22 +61,25 @@ const QrDisplay: React.FC<QrDisplayProps> = ({ value, options }) => {
     }
   };
 
+  const ActionButton: React.FC<{ onClick: () => void; children: React.ReactNode; primary?: boolean }> = ({ onClick, children, primary }) => (
+    <button
+      onClick={onClick}
+      className={`w-full sm:w-auto flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-lg shadow-sm transition-transform transform active:scale-95
+        ${primary
+          ? 'bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+          : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 border border-gray-300 dark:border-gray-600'
+        }`}
+    >
+      {children}
+    </button>
+  );
+
   return (
-    <Stack spacing={3} alignItems="center">
-      <Paper
-        elevation={4}
-        sx={{
-          p: 2,
-          bgcolor: options.bgColor,
-          borderRadius: 3,
-          border: `1px solid ${theme.palette.divider}`,
-          display: 'inline-block',
-          transition: 'all 0.3s ease',
-          '&:hover': {
-            transform: 'scale(1.02)'
-          }
-        }}
+    <div className="flex flex-col items-center gap-6">
+      <div
         ref={qrRef}
+        className="p-4 bg-white rounded-xl shadow-2xl border border-gray-100 dark:border-gray-700 transition-transform duration-300 hover:scale-105"
+        style={{ backgroundColor: options.bgColor }}
       >
         <QRCodeCanvas
           value={value}
@@ -99,22 +88,13 @@ const QrDisplay: React.FC<QrDisplayProps> = ({ value, options }) => {
           bgColor={options.bgColor}
           level={options.level}
         />
-      </Paper>
-
-      <Stack spacing={1.5} direction={{ xs: 'column', sm: 'row' }} width="100%" justifyContent="center">
-        <Button onClick={downloadPNG} variant="contained" startIcon={<DownloadIcon />}>
-          Download PNG
-        </Button>
-        <Button onClick={downloadSVG} variant="outlined" startIcon={<DownloadIcon />}>
-          Download SVG
-        </Button>
-        {navigator.share && (
-          <Button onClick={handleShare} variant="outlined" startIcon={<ShareIcon />}>
-            Share
-          </Button>
-        )}
-      </Stack>
-    </Stack>
+      </div>
+      <div className="w-full flex flex-col sm:flex-row gap-3">
+        <ActionButton onClick={downloadPNG} primary><Download size={16} /> PNG</ActionButton>
+        <ActionButton onClick={downloadSVG}><Download size={16} /> SVG</ActionButton>
+        {navigator.share && <ActionButton onClick={handleShare}><Share2 size={16} /> Share</ActionButton>}
+      </div>
+    </div>
   );
 };
 

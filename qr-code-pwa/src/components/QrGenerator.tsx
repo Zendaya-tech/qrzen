@@ -13,27 +13,20 @@ export type QrOptions = {
 
 const QrGenerator: React.FC = () => {
   const [value, setValue] = useState('https://github.com/Jules-AI');
-  const [options, setOptions] = useState<Omit<QrOptions, 'logoImage'>>({
+  const [options, setOptions] = useState<Omit<QrOptions, 'logoImage' | 'size'>>({
     level: 'M',
-    size: 256,
-    fgColor: '#000000',
+    size: 280, // Default size for desktop
+    fgColor: '#0f172a', // slate-900
     bgColor: '#ffffff',
   });
   const [logoImage, setLogoImage] = useState<string | undefined>(undefined);
+  const [displaySize, setDisplaySize] = useState(280);
 
-  const [displaySize, setDisplaySize] = useState(256);
-
-  // Effect to handle responsive QR code size
   useEffect(() => {
     const updateSize = () => {
       const screenWidth = window.innerWidth;
-      if (screenWidth < 640) { // sm breakpoint
-        setDisplaySize(screenWidth * 0.8);
-      } else {
-        setDisplaySize(options.size);
-      }
+      setDisplaySize(screenWidth < 768 ? screenWidth * 0.85 : options.size);
     };
-
     updateSize();
     window.addEventListener('resize', updateSize);
     return () => window.removeEventListener('resize', updateSize);
@@ -42,14 +35,14 @@ const QrGenerator: React.FC = () => {
   const finalOptions: QrOptions = {
     ...options,
     logoImage: logoImage,
-    size: displaySize
+    size: displaySize,
   };
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+    <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
         {/* Left Panel */}
-        <div className="space-y-6">
+        <div className="lg:col-span-3 space-y-8">
           <InputPanel onChange={setValue} />
           <OptionsPanel
             options={options}
@@ -60,9 +53,9 @@ const QrGenerator: React.FC = () => {
         </div>
 
         {/* Right Panel (QR Code) */}
-        <div className="lg:sticky top-8 self-start flex justify-center items-center">
+        <div className="lg:col-span-2 lg:sticky top-24 self-start flex justify-center items-start">
           {value && (
-            <div className="transition-opacity duration-500 ease-in-out opacity-100">
+            <div className="transition-all duration-500 ease-in-out">
               <QrDisplay value={value} options={finalOptions} />
             </div>
           )}

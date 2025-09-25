@@ -1,35 +1,23 @@
 import React, { useState, useEffect } from 'react';
 
-interface VCardFormProps {
-  onChange: (data: string) => void;
-}
-
-const InputField = ({ label, onChange }: { label: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) => (
-  <div>
-    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{label}</label>
-    <input
-      type="text"
-      onChange={onChange}
-      className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-    />
-  </div>
+// Reusable styled input component for this form
+const StyledInput = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
+  <input
+    {...props}
+    className="w-full px-3 py-2 text-sm bg-slate-100 dark:bg-slate-800/50 rounded-md border border-slate-200 dark:border-slate-700 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 transition placeholder:text-slate-400 dark:placeholder:text-slate-500"
+  />
 );
 
-const VCardForm: React.FC<VCardFormProps> = ({ onChange }) => {
+const VCardForm: React.FC<{ onChange: (data: string) => void }> = ({ onChange }) => {
   const [vCard, setVCard] = useState({
-    firstName: '',
-    lastName: '',
-    phone: '',
-    email: '',
-    company: '',
-    title: '',
+    firstName: '', lastName: '', phone: '', email: '', company: '', title: '',
   });
 
   useEffect(() => {
     const { firstName, lastName, phone, email, company, title } = vCard;
-    if (!firstName && !lastName && !phone && !email && !company && !title) {
-        onChange('');
-        return;
+    if (Object.values(vCard).every(v => v === '')) {
+      onChange('');
+      return;
     }
     let vCardString = 'BEGIN:VCARD\nVERSION:3.0\n';
     vCardString += `N:${lastName};${firstName}\n`;
@@ -41,18 +29,18 @@ const VCardForm: React.FC<VCardFormProps> = ({ onChange }) => {
     onChange(vCardString);
   }, [vCard, onChange]);
 
-  const handleChange = (field: keyof typeof vCard) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    setVCard({ ...vCard, [field]: event.target.value });
+  const handleChange = (field: keyof typeof vCard) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setVCard(prev => ({ ...prev, [field]: e.target.value }));
   };
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <InputField label="First Name" onChange={handleChange('firstName')} />
-      <InputField label="Last Name" onChange={handleChange('lastName')} />
-      <InputField label="Phone Number" onChange={handleChange('phone')} />
-      <InputField label="Email" onChange={handleChange('email')} />
-      <InputField label="Company" onChange={handleChange('company')} />
-      <InputField label="Job Title" onChange={handleChange('title')} />
+      <StyledInput placeholder="First Name" onChange={handleChange('firstName')} />
+      <StyledInput placeholder="Last Name" onChange={handleChange('lastName')} />
+      <StyledInput placeholder="Phone Number" type="tel" onChange={handleChange('phone')} />
+      <StyledInput placeholder="Email" type="email" onChange={handleChange('email')} />
+      <StyledInput placeholder="Company" onChange={handleChange('company')} />
+      <StyledInput placeholder="Job Title" onChange={handleChange('title')} />
     </div>
   );
 };

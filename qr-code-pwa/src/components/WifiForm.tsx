@@ -1,39 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
-interface WifiFormProps {
-  onChange: (data: string) => void;
-}
-
-const InputField = ({ label, type = 'text', onChange }: { label: string; type?: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) => (
-    <div>
-        <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{label}</label>
-        <input
-            type={type}
-            onChange={onChange}
-            className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-        />
-    </div>
+const StyledInput = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
+  <input {...props} className="w-full px-3 py-2 text-sm bg-slate-100 dark:bg-slate-800/50 rounded-md border border-slate-200 dark:border-slate-700 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 transition placeholder:text-slate-400 dark:placeholder:text-slate-500" />
 );
 
-const SelectField = ({ label, value, onChange, children }: { label: string; value: string; onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void; children: React.ReactNode }) => (
-    <div>
-        <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{label}</label>
-        <select
-            value={value}
-            onChange={onChange}
-            className="mt-1 block w-full pl-3 pr-10 py-2 text-base bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-        >
-            {children}
-        </select>
-    </div>
+const StyledSelect = (props: React.SelectHTMLAttributes<HTMLSelectElement>) => (
+  <select {...props} className="w-full px-3 py-2 text-sm bg-slate-100 dark:bg-slate-800/50 rounded-md border border-slate-200 dark:border-slate-700 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 transition" />
 );
 
-const WifiForm: React.FC<WifiFormProps> = ({ onChange }) => {
-  const [wifi, setWifi] = useState({
-    ssid: '',
-    password: '',
-    encryption: 'WPA',
-  });
+const WifiForm: React.FC<{ onChange: (data: string) => void }> = ({ onChange }) => {
+  const [wifi, setWifi] = useState({ ssid: '', password: '', encryption: 'WPA' });
 
   useEffect(() => {
     const { ssid, password, encryption } = wifi;
@@ -47,21 +23,21 @@ const WifiForm: React.FC<WifiFormProps> = ({ onChange }) => {
     onChange(wifiString);
   }, [wifi, onChange]);
 
-  const handleChange = (field: keyof typeof wifi) => (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setWifi({ ...wifi, [field]: event.target.value });
+  const handleChange = (field: keyof typeof wifi) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setWifi(prev => ({ ...prev, [field]: e.target.value }));
   };
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div className="sm:col-span-2">
-        <InputField label="Network Name (SSID)" onChange={handleChange('ssid')} />
+        <StyledInput placeholder="Network Name (SSID)" onChange={handleChange('ssid')} />
       </div>
-      <InputField label="Password" type="password" onChange={handleChange('password')} />
-      <SelectField label="Encryption" value={wifi.encryption} onChange={handleChange('encryption')}>
+      <StyledInput placeholder="Password" type="password" onChange={handleChange('password')} />
+      <StyledSelect value={wifi.encryption} onChange={handleChange('encryption')}>
         <option value="WPA">WPA/WPA2</option>
         <option value="WEP">WEP</option>
         <option value="nopass">None</option>
-      </SelectField>
+      </StyledSelect>
     </div>
   );
 };

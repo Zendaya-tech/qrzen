@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import { toSvg } from 'qrcode';
-import { Paper, Box, Button, ButtonGroup } from '@mui/material';
+import { Paper, Box, Button, ButtonGroup, Stack, useTheme } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import ShareIcon from '@mui/icons-material/Share';
 import { QrOptions } from './QrGenerator';
@@ -13,6 +13,7 @@ interface QrDisplayProps {
 
 const QrDisplay: React.FC<QrDisplayProps> = ({ value, options }) => {
   const qrRef = useRef<HTMLDivElement>(null);
+  const theme = useTheme();
 
   const getCanvas = (): HTMLCanvasElement | null => {
     if (qrRef.current) {
@@ -24,9 +25,7 @@ const QrDisplay: React.FC<QrDisplayProps> = ({ value, options }) => {
   const downloadPNG = () => {
     const canvas = getCanvas();
     if (canvas) {
-      const pngUrl = canvas
-        .toDataURL('image/png')
-        .replace('image/png', 'image/octet-stream');
+      const pngUrl = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
       let downloadLink = document.createElement('a');
       downloadLink.href = pngUrl;
       downloadLink.download = 'qrcode.png';
@@ -38,12 +37,9 @@ const QrDisplay: React.FC<QrDisplayProps> = ({ value, options }) => {
 
   const downloadSVG = () => {
     toSvg(value, {
-        width: options.size,
-        color: {
-            dark: options.fgColor,
-            light: options.bgColor,
-        },
-        errorCorrectionLevel: options.level,
+      width: options.size,
+      color: { dark: options.fgColor, light: options.bgColor },
+      errorCorrectionLevel: options.level,
     }, (err, svgString) => {
       if (err) throw err;
       const svgBlob = new Blob([svgString], { type: 'image/svg+xml' });
@@ -65,11 +61,7 @@ const QrDisplay: React.FC<QrDisplayProps> = ({ value, options }) => {
         if (blob) {
           try {
             await navigator.share({
-              files: [
-                new File([blob], 'qrcode.png', {
-                  type: 'image/png',
-                }),
-              ],
+              files: [new File([blob], 'qrcode.png', { type: 'image/png' })],
               title: 'QR Code',
               text: `QR Code for: ${value}`,
             });
@@ -84,33 +76,45 @@ const QrDisplay: React.FC<QrDisplayProps> = ({ value, options }) => {
   };
 
   return (
-    <Box mt={2} display="flex" flexDirection="column" alignItems="center">
-      <div ref={qrRef}>
-          <Paper elevation={3} sx={{ p: 2, bgcolor: options.bgColor, display: 'inline-block' }}>
-            <QRCodeCanvas
-              value={value}
-              size={options.size}
-              fgColor={options.fgColor}
-              bgColor={options.bgColor}
-              level={options.level}
-            />
-          </Paper>
-      </div>
+    <Stack spacing={3} alignItems="center">
+      <Paper
+        elevation={4}
+        sx={{
+          p: 2,
+          bgcolor: options.bgColor,
+          borderRadius: 3,
+          border: `1px solid ${theme.palette.divider}`,
+          display: 'inline-block',
+          transition: 'all 0.3s ease',
+          '&:hover': {
+            transform: 'scale(1.02)'
+          }
+        }}
+        ref={qrRef}
+      >
+        <QRCodeCanvas
+          value={value}
+          size={options.size}
+          fgColor={options.fgColor}
+          bgColor={options.bgColor}
+          level={options.level}
+        />
+      </Paper>
 
-      <ButtonGroup variant="contained" sx={{ mt: 2 }}>
-        <Button onClick={downloadPNG} startIcon={<DownloadIcon />}>
-          PNG
+      <Stack spacing={1.5} direction={{ xs: 'column', sm: 'row' }} width="100%" justifyContent="center">
+        <Button onClick={downloadPNG} variant="contained" startIcon={<DownloadIcon />}>
+          Download PNG
         </Button>
-        <Button onClick={downloadSVG} startIcon={<DownloadIcon />}>
-          SVG
+        <Button onClick={downloadSVG} variant="outlined" startIcon={<DownloadIcon />}>
+          Download SVG
         </Button>
         {navigator.share && (
-          <Button onClick={handleShare} startIcon={<ShareIcon />}>
+          <Button onClick={handleShare} variant="outlined" startIcon={<ShareIcon />}>
             Share
           </Button>
         )}
-      </ButtonGroup>
-    </Box>
+      </Stack>
+    </Stack>
   );
 };
 

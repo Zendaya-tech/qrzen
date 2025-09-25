@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Box, Tabs, Tab, TextField } from '@mui/material';
+import { Box, Tabs, Tab, TextField, Paper } from '@mui/material';
 import VCardForm from './VCardForm';
 import WifiForm from './WifiForm';
 
 interface InputPanelProps {
-  value: string; // This will now hold the raw data for the QR code
   onChange: (value: string) => void;
 }
 
@@ -25,46 +24,52 @@ function TabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && <Box sx={{ p: { xs: 2, sm: 3 } }}>{children}</Box>}
     </div>
   );
 }
 
 const InputPanel: React.FC<InputPanelProps> = ({ onChange }) => {
   const [tabIndex, setTabIndex] = useState(0);
-  const [textValue, setTextValue] = useState('https://www.google.com');
+  const [textValue, setTextValue] = useState('https://github.com/Jules-AI');
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabIndex(newValue);
-    // Reset value when changing tabs
-    switch (newValue) {
-      case 0:
-        onChange(textValue);
-        break;
-      default:
-        onChange('');
+    if (newValue === 0) {
+      onChange(textValue);
+    } else {
+      onChange('');
     }
   };
 
   const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setTextValue(event.target.value);
-      onChange(event.target.value);
-  }
+    setTextValue(event.target.value);
+    onChange(event.target.value);
+  };
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Paper variant="outlined" sx={{ width: '100%', bgcolor: 'background.default' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={tabIndex} onChange={handleTabChange} aria-label="content type tabs" centered>
+        <Tabs
+          value={tabIndex}
+          onChange={handleTabChange}
+          aria-label="content type tabs"
+          variant="scrollable"
+          scrollButtons="auto"
+          allowScrollButtonsMobile
+        >
           <Tab label="Text / URL" />
-          <Tab label="vCard" />
+          <Tab label="Contact (vCard)" />
           <Tab label="Wi-Fi" />
         </Tabs>
       </Box>
       <TabPanel value={tabIndex} index={0}>
         <TextField
           label="Enter text or URL"
-          variant="outlined"
+          variant="filled"
           fullWidth
+          multiline
+          rows={4}
           value={textValue}
           onChange={handleTextChange}
         />
@@ -75,7 +80,7 @@ const InputPanel: React.FC<InputPanelProps> = ({ onChange }) => {
       <TabPanel value={tabIndex} index={2}>
         <WifiForm onChange={onChange} />
       </TabPanel>
-    </Box>
+    </Paper>
   );
 };
 

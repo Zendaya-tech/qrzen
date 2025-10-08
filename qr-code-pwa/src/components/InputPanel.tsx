@@ -5,7 +5,7 @@ import { Type, User, Wifi } from 'lucide-react';
 
 const InputPanel: React.FC<{ onChange: (value: string) => void }> = ({ onChange }) => {
   const [tab, setTab] = useState('text');
-  const [textValue, setTextValue] = useState('https://github.com/Jules-AI');
+  const [textValue, setTextValue] = useState('https://zendaya.tech');
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTextValue(e.target.value);

@@ -31,7 +31,7 @@ function App() {
             <div className="flex items-center space-x-2">
               <Zap className="h-6 w-6 text-primary-600 dark:text-primary-400" />
               <h1 className="text-lg font-bold text-slate-900 dark:text-slate-100">
-                QR Spark
+                QRZen
               </h1>
             </div>
             <button

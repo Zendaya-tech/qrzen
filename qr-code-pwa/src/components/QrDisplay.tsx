@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import { toSvg } from 'qrcode';
-import { QrOptions } from './QrGenerator';
+import type { QrOptions } from './QrGenerator';
 import { Download, Share2 } from 'lucide-react';
 
 const QrDisplay: React.FC<{ value: string; options: QrOptions; }> = ({ value, options }) => {
@@ -18,7 +18,7 @@ const QrDisplay: React.FC<{ value: string; options: QrOptions; }> = ({ value, op
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    if(url.startsWith('blob:')) URL.revokeObjectURL(url);
+    if (url.startsWith('blob:')) URL.revokeObjectURL(url);
   };
 
   const downloadPNG = () => {

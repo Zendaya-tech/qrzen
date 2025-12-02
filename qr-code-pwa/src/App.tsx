@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import QrGenerator from './components/QrGenerator';
 import { Sun, Moon, Zap } from 'lucide-react';
 
@@ -19,13 +19,15 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen font-sans text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-slate-950">
-      {/* Background decorative gradients */}
-      <div className="absolute top-0 left-0 -z-10 h-full w-full bg-white dark:bg-slate-900">
-        <div className="absolute bottom-auto left-auto right-0 top-0 h-[500px] w-[500px] -translate-x-[30%] translate-y-[20%] rounded-full bg-[rgba(124,58,237,0.5)] opacity-50 blur-[80px] dark:bg-[rgba(99,102,241,0.5)]"></div>
+    <div className="min-h-screen font-sans text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-slate-950 relative overflow-hidden">
+      {/* Mesh Gradient Background */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl mix-blend-multiply dark:mix-blend-screen animate-blob"></div>
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl mix-blend-multiply dark:mix-blend-screen animate-blob animation-delay-2000"></div>
+        <div className="absolute -bottom-32 left-1/3 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl mix-blend-multiply dark:mix-blend-screen animate-blob animation-delay-4000"></div>
       </div>
 
-      <header className="sticky top-0 z-50 w-full border-b border-slate-200/40 bg-white/80 backdrop-blur-lg dark:border-slate-800/40 dark:bg-slate-900/80">
+      <header className="sticky top-0 z-50 w-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border-b border-white/20 dark:border-slate-800/50 shadow-sm">
         <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-2">

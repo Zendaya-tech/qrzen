@@ -13,7 +13,7 @@ export type QrOptions = {
 
 const QrGenerator: React.FC = () => {
   const [value, setValue] = useState('https://github.com/Jules-AI');
-  const [options, setOptions] = useState<Omit<QrOptions, 'logoImage' | 'size'>>({
+  const [options, setOptions] = useState<Omit<QrOptions, 'logoImage'>>({
     level: 'M',
     size: 280, // Default size for desktop
     fgColor: '#0f172a', // slate-900
@@ -39,10 +39,10 @@ const QrGenerator: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+    <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
         {/* Left Panel */}
-        <div className="lg:col-span-3 space-y-8">
+        <div className="lg:col-span-3 space-y-6">
           <InputPanel onChange={setValue} />
           <OptionsPanel
             options={options}
@@ -53,9 +53,9 @@ const QrGenerator: React.FC = () => {
         </div>
 
         {/* Right Panel (QR Code) */}
-        <div className="lg:col-span-2 lg:sticky top-24 self-start flex justify-center items-start">
+        <div className="lg:col-span-2 lg:sticky top-24 self-start flex justify-center items-start order-first lg:order-last mb-8 lg:mb-0">
           {value && (
-            <div className="transition-all duration-500 ease-in-out">
+            <div className="transition-all duration-500 ease-in-out w-full max-w-sm mx-auto">
               <QrDisplay value={value} options={finalOptions} />
             </div>
           )}

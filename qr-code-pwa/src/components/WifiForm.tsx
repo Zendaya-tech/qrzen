@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
 const StyledInput = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
-  <input {...props} className="w-full px-3 py-2 text-sm bg-slate-100 dark:bg-slate-800/50 rounded-md border border-slate-200 dark:border-slate-700 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 transition placeholder:text-slate-400 dark:placeholder:text-slate-500" />
+  <input {...props} className="w-full px-4 py-3 text-sm rounded-xl glass-input transition-all duration-200 placeholder:text-slate-400 dark:placeholder:text-slate-500" />
 );
 
 const StyledSelect = (props: React.SelectHTMLAttributes<HTMLSelectElement>) => (
-  <select {...props} className="w-full px-3 py-2 text-sm bg-slate-100 dark:bg-slate-800/50 rounded-md border border-slate-200 dark:border-slate-700 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 transition" />
+  <select {...props} className="w-full px-4 py-3 text-sm rounded-xl glass-input transition-all duration-200" />
 );
 
 const WifiForm: React.FC<{ onChange: (data: string) => void }> = ({ onChange }) => {

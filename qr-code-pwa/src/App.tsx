@@ -19,30 +19,31 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen font-sans text-slate-800 dark:text-slate-200 bg-slate-50 dark:bg-slate-950 relative overflow-hidden">
-      {/* Mesh Gradient Background */}
+    <div className="min-h-screen font-sans text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-950">
+      {/* Enhanced gradient background with pattern */}
       <div className="fixed inset-0 -z-10">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl mix-blend-multiply dark:mix-blend-screen animate-blob"></div>
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl mix-blend-multiply dark:mix-blend-screen animate-blob animation-delay-2000"></div>
-        <div className="absolute -bottom-32 left-1/3 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl mix-blend-multiply dark:mix-blend-screen animate-blob animation-delay-4000"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.05),rgba(255,255,255,0))] dark:bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.1),rgba(0,0,0,0))]"></div>
       </div>
 
-      <header className="sticky top-0 z-50 w-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border-b border-white/20 dark:border-slate-800/50 shadow-sm">
+      <header className="sticky top-0 z-50 backdrop-blur-md bg-white/80 dark:bg-slate-950/80 border-b border-slate-200/50 dark:border-slate-800/50">
         <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-2">
-              <Zap className="h-6 w-6 text-primary-600 dark:text-primary-400" />
-              <h1 className="text-lg font-bold text-slate-900 dark:text-slate-100">
+          <div className="flex items-center justify-between h-14 sm:h-16">
+            <div className="flex items-center gap-2 sm:gap-2.5">
+              <div className="p-1 sm:p-1.5 bg-slate-900 dark:bg-white rounded-lg">
+                <Zap className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-white dark:text-slate-900" strokeWidth={2.5} />
+              </div>
+              <h1 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">
                 QRZen
               </h1>
             </div>
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-full text-slate-600 dark:text-slate-300 hover:bg-slate-200/70 dark:hover:bg-slate-800/70 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 focus:ring-offset-slate-50 dark:focus:ring-offset-slate-950"
+              className="p-2 sm:p-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-all"
               aria-label="Toggle theme"
             >
-              <Sun size={20} className="hidden dark:block" />
-              <Moon size={20} className="block dark:hidden" />
+              <Sun size={16} className="hidden dark:block sm:w-[18px] sm:h-[18px]" />
+              <Moon size={16} className="block dark:hidden sm:w-[18px] sm:h-[18px]" />
             </button>
           </div>
         </nav>

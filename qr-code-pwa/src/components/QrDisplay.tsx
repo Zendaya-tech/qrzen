@@ -64,12 +64,14 @@ const QrDisplay: React.FC<{ value: string; options: QrOptions; }> = ({ value, op
   } : undefined;
 
   return (
-    <div className="flex flex-col items-center gap-8">
-      <div className="relative">
-        <div className="absolute -inset-2 bg-gradient-to-br from-primary-400 to-primary-600 rounded-3xl blur opacity-20 dark:opacity-40"></div>
+    <div className="flex flex-col items-center gap-4 sm:gap-6 animate-scale-in">
+      <div className="relative group w-full flex justify-center">
+        {/* Glow effect on hover - hidden on mobile for performance */}
+        <div className="hidden sm:block absolute -inset-4 bg-gradient-to-r from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-800 rounded-2xl opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500"></div>
+        
         <div
           ref={qrRef}
-          className="relative p-5 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg rounded-2xl shadow-lg border border-slate-200/80 dark:border-slate-800/80"
+          className="relative p-4 sm:p-6 lg:p-8 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 qr-glow transition-all duration-300 sm:group-hover:scale-[1.02]"
           style={{ backgroundColor: options.bgColor }}
         >
           <QRCodeCanvas
@@ -82,18 +84,33 @@ const QrDisplay: React.FC<{ value: string; options: QrOptions; }> = ({ value, op
           />
         </div>
       </div>
-      <div className="w-full flex flex-col sm:flex-row gap-3">
-        <button onClick={downloadPNG} className="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold rounded-lg shadow-md transition-transform transform active:scale-95 bg-primary-600 text-white hover:bg-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500 focus-visible:ring-offset-slate-50 dark:focus-visible:ring-offset-slate-950">
-          <Download size={16} /> Download PNG
+      
+      <div className="w-full flex flex-col gap-2 sm:gap-2.5">
+        <button 
+          onClick={downloadPNG} 
+          className="group w-full flex items-center justify-center gap-2 px-4 py-2.5 sm:py-3 text-sm font-semibold rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 card-shadow hover:card-shadow-hover transition-all duration-200 active:scale-[0.98]"
+        >
+          <Download size={16} className="sm:group-hover:scale-110 transition-transform" /> 
+          <span className="hidden xs:inline">Download </span>PNG
         </button>
-        <button onClick={downloadSVG} className="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold rounded-lg shadow-md transition-transform transform active:scale-95 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500">
-          <Download size={16} /> Download SVG
-        </button>
-        {navigator.share && (
-          <button onClick={handleShare} className="flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold rounded-lg shadow-md transition-transform transform active:scale-95 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary-500">
-            <Share2 size={16} /> Share
+        <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
+          <button 
+            onClick={downloadSVG} 
+            className="group flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-medium rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 card-shadow hover:card-shadow-hover transition-all duration-200 active:scale-[0.98]"
+          >
+            <Download size={14} className="sm:group-hover:scale-110 transition-transform" /> 
+            SVG
           </button>
-        )}
+          {navigator.share && (
+            <button 
+              onClick={handleShare} 
+              className="group flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-medium rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 card-shadow hover:card-shadow-hover transition-all duration-200 active:scale-[0.98]"
+            >
+              <Share2 size={14} className="sm:group-hover:scale-110 transition-transform" /> 
+              Share
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

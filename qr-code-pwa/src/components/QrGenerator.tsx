@@ -25,7 +25,18 @@ const QrGenerator: React.FC = () => {
   useEffect(() => {
     const updateSize = () => {
       const screenWidth = window.innerWidth;
-      setDisplaySize(screenWidth < 768 ? screenWidth * 0.85 : options.size);
+      // Mobile: smaller QR code
+      if (screenWidth < 640) {
+        setDisplaySize(Math.min(screenWidth * 0.7, 240));
+      } 
+      // Tablet: medium QR code
+      else if (screenWidth < 1024) {
+        setDisplaySize(Math.min(screenWidth * 0.5, 280));
+      } 
+      // Desktop: use selected size
+      else {
+        setDisplaySize(options.size);
+      }
     };
     updateSize();
     window.addEventListener('resize', updateSize);
@@ -39,10 +50,13 @@ const QrGenerator: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
-        {/* Left Panel */}
-        <div className="lg:col-span-3 space-y-6">
+    <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-10 lg:py-16">
+      {/* Mobile: QR Code first, then controls */}
+      {/* Desktop: Controls left, QR Code right sticky */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 xl:gap-16">
+        
+        {/* Controls Panel - Order 2 on mobile, 1 on desktop */}
+        <div className="space-y-4 sm:space-y-6 order-2 lg:order-1">
           <InputPanel onChange={setValue} />
           <OptionsPanel
             options={options}
@@ -52,10 +66,10 @@ const QrGenerator: React.FC = () => {
           />
         </div>
 
-        {/* Right Panel (QR Code) */}
-        <div className="lg:col-span-2 lg:sticky top-24 self-start flex justify-center items-start order-first lg:order-last mb-8 lg:mb-0">
+        {/* QR Code Display - Order 1 on mobile (shows first), 2 on desktop */}
+        <div className="order-1 lg:order-2 lg:sticky lg:top-20 self-start">
           {value && (
-            <div className="transition-all duration-500 ease-in-out w-full max-w-sm mx-auto">
+            <div className="w-full max-w-md mx-auto lg:max-w-none">
               <QrDisplay value={value} options={finalOptions} />
             </div>
           )}

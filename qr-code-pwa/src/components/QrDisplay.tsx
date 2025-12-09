@@ -86,31 +86,31 @@ const QrDisplay: React.FC<{ value: string; options: QrOptions; }> = ({ value, op
       </div>
       
       <div className="w-full flex flex-col gap-2 sm:gap-2.5">
-        <button 
-          onClick={downloadPNG} 
-          className="group w-full flex items-center justify-center gap-2 px-4 py-2.5 sm:py-3 text-sm font-semibold rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 card-shadow hover:card-shadow-hover transition-all duration-200 active:scale-[0.98]"
-        >
-          <Download size={16} className="sm:group-hover:scale-110 transition-transform" /> 
-          <span className="hidden xs:inline">Download </span>PNG
-        </button>
         <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
           <button 
-            onClick={downloadSVG} 
-            className="group flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-medium rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 card-shadow hover:card-shadow-hover transition-all duration-200 active:scale-[0.98]"
+            onClick={downloadPNG} 
+            className="group flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 card-shadow hover:card-shadow-hover transition-all duration-200 active:scale-[0.98]"
           >
-            <Download size={14} className="sm:group-hover:scale-110 transition-transform" /> 
+            <Download size={16} className="sm:group-hover:scale-110 transition-transform" /> 
+            PNG
+          </button>
+          <button 
+            onClick={downloadSVG} 
+            className="group flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 card-shadow hover:card-shadow-hover transition-all duration-200 active:scale-[0.98]"
+          >
+            <Download size={16} className="sm:group-hover:scale-110 transition-transform" /> 
             SVG
           </button>
-          {navigator.share && (
-            <button 
-              onClick={handleShare} 
-              className="group flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-medium rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 card-shadow hover:card-shadow-hover transition-all duration-200 active:scale-[0.98]"
-            >
-              <Share2 size={14} className="sm:group-hover:scale-110 transition-transform" /> 
-              Share
-            </button>
-          )}
         </div>
+        {navigator.share && (
+          <button 
+            onClick={handleShare} 
+            className="group w-full flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 card-shadow hover:card-shadow-hover transition-all duration-200 active:scale-[0.98]"
+          >
+            <Share2 size={16} className="sm:group-hover:scale-110 transition-transform" /> 
+            Share
+          </button>
+        )}
       </div>
     </div>
   );

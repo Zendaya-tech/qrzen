@@ -75,6 +75,9 @@ importers:
       vite:
         specifier: ^7.1.7
         version: 7.2.6(@types/node@24.10.1)(jiti@1.21.7)(terser@5.44.1)
+      workbox-window:
+        specifier: ^7.4.0
+        version: 7.4.0
 
 packages:
 

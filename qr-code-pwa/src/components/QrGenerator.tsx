@@ -12,7 +12,7 @@ export type QrOptions = {
 };
 
 const QrGenerator: React.FC = () => {
-  const [value, setValue] = useState('https://github.com/Jules-AI');
+  const [value, setValue] = useState('https://zendaya.tech');
   const [options, setOptions] = useState<Omit<QrOptions, 'logoImage'>>({
     level: 'M',
     size: 280, // Default size for desktop

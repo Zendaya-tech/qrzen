@@ -25,9 +25,9 @@ const QrGenerator: React.FC = () => {
   useEffect(() => {
     const updateSize = () => {
       const screenWidth = window.innerWidth;
-      // Mobile: smaller QR code
+      // Mobile: make the QR fill the available width
       if (screenWidth < 640) {
-        setDisplaySize(Math.min(screenWidth * 0.7, 240));
+        setDisplaySize(Math.max(180, screenWidth - 64));
       } 
       // Tablet: medium QR code
       else if (screenWidth < 1024) {
@@ -50,10 +50,10 @@ const QrGenerator: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-10 lg:py-16">
+    <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-14">
       {/* Mobile: QR Code first, then controls */}
       {/* Desktop: Controls left, QR Code right sticky */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 xl:gap-16">
+      <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-6 sm:gap-8 lg:gap-12 xl:gap-16">
         
         {/* Controls Panel - Order 2 on mobile, 1 on desktop */}
         <div className="space-y-4 sm:space-y-6 order-2 lg:order-1">
@@ -67,9 +67,9 @@ const QrGenerator: React.FC = () => {
         </div>
 
         {/* QR Code Display - Order 1 on mobile (shows first), 2 on desktop */}
-        <div className="order-1 lg:order-2 lg:sticky lg:top-20 self-start">
+        <div className="order-1 lg:order-2 lg:sticky lg:top-24 self-start">
           {value && (
-            <div className="w-full max-w-md mx-auto lg:max-w-none">
+            <div className="w-full mx-auto">
               <QrDisplay value={value} options={finalOptions} />
             </div>
           )}
